@@ -26,13 +26,9 @@ function SignUp() {
     });
 
     const signUpMutation = useMutation(
-        async (data) =>
+        async (data: userData) =>
             await axios.post(`http://localhost:8080${SIGN_UP_API_URL}`, data),
         {
-            onMutate: (variable: userData) => {
-                console.log('onMutate', variable);
-            },
-
             onError: (error: AxiosError<{ details: string }>) => {
                 window.alert(error.response?.data.details);
             },

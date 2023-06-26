@@ -32,12 +32,9 @@ function Login() {
     }, []);
 
     const loginMutation = useMutation(
-        async (data) =>
+        async (data: userData) =>
             await axios.post(`http://localhost:8080${LOGIN_API_URL}`, data),
         {
-            onMutate: (variable: userData) => {
-                console.log('onMutate', variable);
-            },
             onError: (error: AxiosError<{ details: string }>) => {
                 window.alert(error.response?.data.details);
             },

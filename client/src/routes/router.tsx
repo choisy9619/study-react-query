@@ -1,27 +1,27 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import Error from '../pages/Error';
-
 import { LOGIN_URL, LOGOUT_URL, MAIN_URL, SIGN_UP_URL } from '@/constants';
-import { Login, SignUp, Root } from '@/pages';
+import { Login, SignUp, Root, Error } from '@/pages';
 
 const router = createBrowserRouter([
     {
         path: MAIN_URL,
         element: <Root />,
         errorElement: <Error />,
-    },
-    {
-        path: LOGOUT_URL,
-    },
-    {
-        path: LOGIN_URL,
-        element: <Login />,
-    },
-    {
-        path: SIGN_UP_URL,
-        element: <SignUp />,
+        children: [
+            {
+                path: SIGN_UP_URL,
+                element: <SignUp />,
+            },
+            {
+                path: LOGIN_URL,
+                element: <Login />,
+            },
+            {
+                path: LOGOUT_URL,
+            },
+        ],
     },
 ]);
 
