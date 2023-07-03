@@ -4,7 +4,7 @@ import { TODO_API_URL } from '@/constants';
 import { type INewTodo, type ITodo, type IUpdateTodo } from '@/interfaces';
 
 const todoAPI = {
-    getTodoList: async (): Promise<{ data: ITodo }> => {
+    getTodoList: async (): Promise<{ data: ITodo[] }> => {
         const { data } = await instance.get(TODO_API_URL);
         return data;
     },
@@ -28,3 +28,5 @@ const todoAPI = {
         return data;
     },
 };
+
+export default todoAPI;

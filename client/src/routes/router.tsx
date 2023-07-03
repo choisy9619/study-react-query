@@ -1,8 +1,14 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import { LOGIN_URL, LOGOUT_URL, MAIN_URL, SIGN_UP_URL } from '@/constants';
-import { Login, SignUp, Root, Error } from '@/pages';
+import {
+    LOGIN_URL,
+    LOGOUT_URL,
+    MAIN_URL,
+    SIGN_UP_URL,
+    TODO_URL,
+} from '@/constants';
+import { Login, SignUp, Root, Error, Todo } from '@/pages';
 
 const router = createBrowserRouter([
     {
@@ -20,6 +26,10 @@ const router = createBrowserRouter([
             },
             {
                 path: LOGOUT_URL,
+            },
+            {
+                path: TODO_URL,
+                element: <Todo />,
             },
         ],
     },
