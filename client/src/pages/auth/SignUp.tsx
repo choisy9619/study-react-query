@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import { useMutation } from '@tanstack/react-query';
-import axios, { type AxiosError } from 'axios';
+import { type AxiosError } from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+
+import instance from '../../middlewares/axios';
 
 import { LOGIN_URL, SIGN_UP_API_URL } from '@/constants';
 import { type userData } from '@/interfaces';
@@ -26,8 +28,7 @@ function SignUp() {
     });
 
     const signUpMutation = useMutation(
-        async (data: userData) =>
-            await axios.post(`http://localhost:8080${SIGN_UP_API_URL}`, data),
+        async (data: userData) => await instance.post(SIGN_UP_API_URL, data),
         {
             onError: (error: AxiosError<{ details: string }>) => {
                 window.alert(error.response?.data.details);
