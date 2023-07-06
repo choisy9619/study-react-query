@@ -1,9 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type AxiosError } from 'axios/index';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import todoAPI from '../../api/todo';
+import { useCreateTodo } from '../../hooks/useCreateTodo';
 
 import { type INewTodo } from '@/interfaces';
 
@@ -13,7 +11,7 @@ const defaultFormValues = {
 };
 
 export default function AddTodo() {
-    const queryClient = useQueryClient();
+    const { mutate: createTodoMutation } = useCreateTodo();
 
     const {
         register,
@@ -25,21 +23,12 @@ export default function AddTodo() {
         defaultValues: defaultFormValues,
     });
 
-    const addTodoMutation = useMutation(
-        async (data: INewTodo) => await todoAPI.createTodo(data),
-        {
-            onError: (error: AxiosError<{ details: string }>) => {
-                window.alert(error.response?.data.details);
-            },
-            onSuccess: async () => {
-                await queryClient.refetchQueries(['todos']);
+    const onSubmit = (data: INewTodo) => {
+        createTodoMutation(data, {
+            onSuccess: () => {
                 reset(defaultFormValues);
             },
-        },
-    );
-
-    const onSubmit = (data: INewTodo) => {
-        addTodoMutation.mutate(data);
+        });
     };
 
     return (

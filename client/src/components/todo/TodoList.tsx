@@ -1,19 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
 import TodoNothing from './TodoNothing';
-import todoAPI from '../../api/todo';
+import { useDeleteTodo } from '../../hooks/useDeleteTodo';
+import { useGetTodoList } from '../../hooks/useGetTodoList';
 import Loading from '../Loading';
 
 import { type ITodo } from '@/interfaces';
 
 export default function TodoList() {
-    const { data: todoList, isLoading } = useQuery(
-        ['todos'],
-        async () => await todoAPI.getTodoList(),
-    );
+    const { mutate: deleteTodoMutation } = useDeleteTodo();
 
-    if (isLoading) return <Loading />;
+    const { todoList, isGetTodoListLoading } = useGetTodoList();
+
+    const handleDeleteTodo = (id: string) => {
+        deleteTodoMutation(id);
+    };
+
+    if (isGetTodoListLoading) return <Loading />;
     if (todoList?.data?.length === 0) return <TodoNothing />;
 
     return (
@@ -23,7 +26,14 @@ export default function TodoList() {
                     <p>{todo.title}</p>
                     <p>{todo.content}</p>
                     <button>수정</button>
-                    <button>삭제</button>
+                    <button
+                        type="submit"
+                        onClick={() => {
+                            handleDeleteTodo(todo.id);
+                        }}
+                    >
+                        삭제
+                    </button>
                 </div>
             ))}
         </>
