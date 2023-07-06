@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import TodoNothing from './TodoNothing';
+import UpdateTodoModal from './UpdateTodoModal';
 import { useDeleteTodo } from '../../hooks/useDeleteTodo';
 import { useGetTodoList } from '../../hooks/useGetTodoList';
 import Loading from '../Loading';
@@ -8,12 +9,16 @@ import Loading from '../Loading';
 import { type ITodo } from '@/interfaces';
 
 export default function TodoList() {
-    const { mutate: deleteTodoMutation } = useDeleteTodo();
+    const [isOpenUpdateTodoModal, setIsOpenModal] = useState<boolean>(false);
+    const [clickedTodoInfo, setClickedTodoInfo] = useState<ITodo>();
 
+    const { mutate: deleteTodoMutation } = useDeleteTodo();
     const { todoList, isGetTodoListLoading } = useGetTodoList();
 
-    const handleDeleteTodo = (id: string) => {
-        deleteTodoMutation(id);
+    const handleCloseModal = () => setIsOpenModal(false);
+    const handleOpenModal = (info: ITodo) => {
+        setClickedTodoInfo(info);
+        setIsOpenModal(true);
     };
 
     if (isGetTodoListLoading) return <Loading />;
@@ -25,17 +30,22 @@ export default function TodoList() {
                 <div key={todo.id}>
                     <p>{todo.title}</p>
                     <p>{todo.content}</p>
-                    <button>수정</button>
+                    <button onClick={() => handleOpenModal(todo)}>수정</button>
                     <button
                         type="submit"
-                        onClick={() => {
-                            handleDeleteTodo(todo.id);
-                        }}
+                        onClick={() => deleteTodoMutation(todo.id)}
                     >
                         삭제
                     </button>
                 </div>
             ))}
+            {isOpenUpdateTodoModal && clickedTodoInfo != null && (
+                <UpdateTodoModal
+                    open={isOpenUpdateTodoModal}
+                    onClose={handleCloseModal}
+                    todoInfo={clickedTodoInfo}
+                />
+            )}
         </>
     );
 }
