@@ -4,7 +4,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useUpdateTodo } from '../../hooks/useUpdateTodo';
+import { useAlertMessage } from '../../stores/alert';
 
+import { UPDATE_TO_DO_SUCCESS } from '@/constants';
 import { type INewTodo, type ITodo, type IUpdateTodo } from '@/interfaces';
 
 const style = {
@@ -26,6 +28,7 @@ interface UpdateTodoModalProps {
 
 export default function UpdateTodoModal(props: UpdateTodoModalProps) {
     const { open, onClose, todoInfo } = props;
+    const { setAlertMessage } = useAlertMessage();
 
     const {
         register,
@@ -46,7 +49,10 @@ export default function UpdateTodoModal(props: UpdateTodoModalProps) {
         };
 
         updateTodoMutation(apiData, {
-            onSuccess: () => onClose(),
+            onSuccess: () => {
+                setAlertMessage(UPDATE_TO_DO_SUCCESS);
+                onClose();
+            },
         });
     };
 
@@ -108,4 +114,5 @@ const StyledTextFieldsWrap = styled.div`
 const StyledButtonsWrap = styled.div`
     display: flex;
     gap: 5px;
+    justify-content: flex-end;
 `;

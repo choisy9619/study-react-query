@@ -8,11 +8,15 @@ import TodoNothing from './TodoNothing';
 import UpdateTodoModal from './UpdateTodoModal';
 import { useDeleteTodo } from '../../hooks/useDeleteTodo';
 import { useGetTodoList } from '../../hooks/useGetTodoList';
-import Loading from '../Loading';
+import { useAlertMessage } from '../../stores/alert';
+import Loading from '../common/Loading';
 
+import { DELETE_TO_DO_SUCCESS } from '@/constants';
 import { type ITodo } from '@/interfaces';
 
 export default function TodoList() {
+    const { setAlertMessage } = useAlertMessage();
+
     const [isOpenUpdateTodoModal, setIsOpenModal] = useState<boolean>(false);
     const [clickedTodoInfo, setClickedTodoInfo] = useState<ITodo>();
 
@@ -23,6 +27,12 @@ export default function TodoList() {
     const handleOpenModal = (info: ITodo) => {
         setClickedTodoInfo(info);
         setIsOpenModal(true);
+    };
+
+    const handleDeleteTodo = (id: string) => {
+        deleteTodoMutation(id, {
+            onSuccess: () => setAlertMessage(DELETE_TO_DO_SUCCESS),
+        });
     };
 
     if (isGetTodoListLoading) return <Loading />;
@@ -37,17 +47,19 @@ export default function TodoList() {
                         key={todo.id}
                         secondaryAction={
                             <StyledListActionButtons>
-                                <IconButton edge="end" aria-label="delete">
-                                    <BuildTwoToneIcon
-                                        onClick={() => handleOpenModal(todo)}
-                                    />
+                                <IconButton
+                                    edge="end"
+                                    aria-label="modify"
+                                    onClick={() => handleOpenModal(todo)}
+                                >
+                                    <BuildTwoToneIcon />
                                 </IconButton>
-                                <IconButton edge="end" aria-label="delete">
-                                    <DeleteIcon
-                                        onClick={() =>
-                                            deleteTodoMutation(todo.id)
-                                        }
-                                    />
+                                <IconButton
+                                    edge="end"
+                                    aria-label="delete"
+                                    onClick={() => handleDeleteTodo(todo.id)}
+                                >
+                                    <DeleteIcon />
                                 </IconButton>
                             </StyledListActionButtons>
                         }

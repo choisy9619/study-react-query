@@ -31,7 +31,7 @@ instance.interceptors.response.use(
     },
     async (error) => {
         if (error.response?.status === 401) {
-            window.location.assign(SIGN_UP_URL);
+            window.location.replace(SIGN_UP_URL);
         }
         return await Promise.reject(error);
     },

@@ -21,6 +21,6 @@ const StyledTodoWrap = styled.div`
     padding: 10px;
 
     h5 {
-        padding: 0 0 20px;
+        padding: 0 0 10px;
     }
 `;

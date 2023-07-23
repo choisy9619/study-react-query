@@ -31,7 +31,8 @@
     "typescript": "*",
     "web-vitals": "^2.1.4",
     "@mui/icons-material": "^5.14.1",
-    "@mui/material": "^5.13.7"
+    "@mui/material": "^5.13.7",
+    "zustand": "^4.3.9"
   },
   "scripts": {
     "start": "react-app-rewired start",

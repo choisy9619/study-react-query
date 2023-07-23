@@ -4,7 +4,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useCreateTodo } from '../../hooks/useCreateTodo';
+import { useAlertMessage } from '../../stores/alert';
 
+import { ADD_TO_DO_SUCCESS } from '@/constants';
 import { type INewTodo } from '@/interfaces';
 
 const defaultFormValues = {
@@ -13,6 +15,7 @@ const defaultFormValues = {
 };
 
 export default function AddTodo() {
+    const { setAlertMessage } = useAlertMessage();
     const { mutate: createTodoMutation } = useCreateTodo();
 
     const {
@@ -25,16 +28,19 @@ export default function AddTodo() {
         defaultValues: defaultFormValues,
     });
 
-    const onSubmit = (data: INewTodo) => {
+    const handleOnSubmit = (data: INewTodo) => {
         createTodoMutation(data, {
-            onSuccess: () => reset({}, { keepDefaultValues: true }),
+            onSuccess: () => {
+                setAlertMessage(ADD_TO_DO_SUCCESS);
+                reset({}, { keepDefaultValues: true });
+            },
         });
     };
 
     return (
         <>
             <Typography variant="subtitle1">할일 추가 🤖</Typography>
-            <StyledTextFieldsWrap onSubmit={handleSubmit(onSubmit)}>
+            <StyledTextFieldsWrap onSubmit={handleSubmit(handleOnSubmit)}>
                 <TextField
                     required
                     type="text"
