@@ -6,8 +6,16 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 
 import instance from '../../middlewares/axios';
+import { useAlertMessage } from '../../stores/alert';
 
-import { LOGIN_API_URL, MAIN_URL, SIGN_UP_URL, TOKEN } from '@/constants';
+import {
+    LOGIN_API_URL,
+    LOGIN_SUCCESS,
+    MAIN_URL,
+    SIGN_UP_URL,
+    TODO_URL,
+    TOKEN,
+} from '@/constants';
 import { type IAuthData } from '@/interfaces';
 
 const defaultFormValues = {
@@ -17,6 +25,7 @@ const defaultFormValues = {
 
 function Login() {
     const navigate = useNavigate();
+    const { setAlertMessage } = useAlertMessage();
 
     const {
         register,
@@ -41,7 +50,8 @@ function Login() {
             },
             onSuccess: (data) => {
                 localStorage.setItem(TOKEN, data?.data.token);
-                navigate(MAIN_URL);
+                setAlertMessage(LOGIN_SUCCESS);
+                navigate(TODO_URL);
             },
         },
     );

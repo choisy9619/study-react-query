@@ -6,8 +6,9 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 
 import instance from '../../middlewares/axios';
+import { useAlertMessage } from '../../stores/alert';
 
-import { LOGIN_URL, SIGN_UP_API_URL } from '@/constants';
+import { LOGIN_URL, SIGN_UP_API_URL, SIGN_UP_SUCCESS } from '@/constants';
 import { type IAuthData } from '@/interfaces';
 
 const defaultFormValues = {
@@ -17,6 +18,7 @@ const defaultFormValues = {
 
 function SignUp() {
     const navigate = useNavigate();
+    const { setAlertMessage } = useAlertMessage();
 
     const {
         register,
@@ -34,6 +36,7 @@ function SignUp() {
                 window.alert(error.response?.data.details);
             },
             onSuccess: (data) => {
+                setAlertMessage(SIGN_UP_SUCCESS);
                 navigate(LOGIN_URL);
             },
         },
