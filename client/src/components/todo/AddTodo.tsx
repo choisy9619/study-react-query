@@ -1,3 +1,5 @@
+import styled from '@emotion/styled';
+import { Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -25,31 +27,44 @@ export default function AddTodo() {
 
     const onSubmit = (data: INewTodo) => {
         createTodoMutation(data, {
-            onSuccess: () => {
-                reset(defaultFormValues);
-            },
+            onSuccess: () => reset({}, { keepDefaultValues: true }),
         });
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <input
-                type="text"
-                placeholder="Title"
-                {...register('title', {
-                    required: 'required',
-                })}
-            />
-            <span>{errors?.title?.message}</span>
-            <input
-                type="text"
-                placeholder="content"
-                {...register('content', {
-                    required: 'required',
-                })}
-            />
-            <span>{errors?.content?.message}</span>
-            <button type="submit">ADD</button>
-        </form>
+        <>
+            <Typography variant="subtitle1">할일 추가 🤖</Typography>
+            <StyledTextFieldsWrap onSubmit={handleSubmit(onSubmit)}>
+                <TextField
+                    required
+                    type="text"
+                    label="Title"
+                    error={!(errors?.title?.message == null)}
+                    helperText={errors?.title?.message}
+                    {...register('title', { required: 'required' })}
+                />
+                <TextField
+                    required
+                    type="text"
+                    label="Content"
+                    error={!(errors?.content?.message == null)}
+                    helperText={errors?.content?.message}
+                    {...register('content', { required: 'required' })}
+                />
+                <Button type="submit" variant="contained">
+                    ADD
+                </Button>
+            </StyledTextFieldsWrap>
+        </>
     );
 }
+
+const StyledTextFieldsWrap = styled.form`
+    display: flex;
+    gap: 10px;
+    padding: 5px 0 20px;
+
+    > button {
+        height: 56px;
+    }
+`;

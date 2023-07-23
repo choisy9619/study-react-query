@@ -1,3 +1,7 @@
+import styled from '@emotion/styled';
+import BuildTwoToneIcon from '@mui/icons-material/BuildTwoTone';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton, List, ListItem, ListItemText } from '@mui/material';
 import React, { useState } from 'react';
 
 import TodoNothing from './TodoNothing';
@@ -25,20 +29,36 @@ export default function TodoList() {
     if (todoList?.data?.length === 0) return <TodoNothing />;
 
     return (
-        <>
-            {todoList?.data?.map((todo: ITodo) => (
-                <div key={todo.id}>
-                    <p>{todo.title}</p>
-                    <p>{todo.content}</p>
-                    <button onClick={() => handleOpenModal(todo)}>수정</button>
-                    <button
-                        type="submit"
-                        onClick={() => deleteTodoMutation(todo.id)}
+        <StyledTodoListWrap>
+            <List>
+                {todoList?.data?.map((todo: ITodo) => (
+                    <StyledListItemWrap
+                        disablePadding
+                        key={todo.id}
+                        secondaryAction={
+                            <StyledListActionButtons>
+                                <IconButton edge="end" aria-label="delete">
+                                    <BuildTwoToneIcon
+                                        onClick={() => handleOpenModal(todo)}
+                                    />
+                                </IconButton>
+                                <IconButton edge="end" aria-label="delete">
+                                    <DeleteIcon
+                                        onClick={() =>
+                                            deleteTodoMutation(todo.id)
+                                        }
+                                    />
+                                </IconButton>
+                            </StyledListActionButtons>
+                        }
                     >
-                        삭제
-                    </button>
-                </div>
-            ))}
+                        <ListItemText
+                            primary={todo.title}
+                            secondary={todo.content}
+                        />
+                    </StyledListItemWrap>
+                ))}
+            </List>
             {isOpenUpdateTodoModal && clickedTodoInfo != null && (
                 <UpdateTodoModal
                     open={isOpenUpdateTodoModal}
@@ -46,6 +66,20 @@ export default function TodoList() {
                     todoInfo={clickedTodoInfo}
                 />
             )}
-        </>
+        </StyledTodoListWrap>
     );
 }
+
+const StyledTodoListWrap = styled.div`
+    padding: 10px 0 0;
+`;
+
+const StyledListItemWrap = styled(ListItem)`
+    padding: 0 0 10px;
+`;
+
+const StyledListActionButtons = styled.div`
+    display: flex;
+    gap: 5px;
+    padding: 0 20px 0;
+`;
