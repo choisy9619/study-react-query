@@ -25,8 +25,8 @@ function App() {
                     onClose={handleCloseAlert}
                     autoHideDuration={1000}
                     anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
+                        vertical: 'top',
+                        horizontal: 'right',
                     }}
                 >
                     <Alert onClose={handleCloseAlert} severity="info">

@@ -1,6 +1,8 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
+import Home from '../pages/Home';
+
 import {
     LOGIN_URL,
     LOGOUT_URL,
@@ -16,6 +18,10 @@ const router = createBrowserRouter([
         element: <Root />,
         errorElement: <Error />,
         children: [
+            {
+                path: MAIN_URL,
+                element: <Home />,
+            },
             {
                 path: SIGN_UP_URL,
                 element: <SignUp />,
