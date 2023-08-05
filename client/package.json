@@ -29,7 +29,12 @@
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.2",
     "typescript": "*",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@mui/icons-material": "^5.14.1",
+    "@mui/material": "^5.13.7",
+    "zustand": "^4.3.9",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

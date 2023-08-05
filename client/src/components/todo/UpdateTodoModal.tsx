@@ -1,9 +1,12 @@
+import styled from '@emotion/styled';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useUpdateTodo } from '../../hooks/useUpdateTodo';
+import { useAlertMessage } from '../../stores/alert';
 
+import { UPDATE_TO_DO_SUCCESS } from '@/constants';
 import { type INewTodo, type ITodo, type IUpdateTodo } from '@/interfaces';
 
 const style = {
@@ -25,6 +28,7 @@ interface UpdateTodoModalProps {
 
 export default function UpdateTodoModal(props: UpdateTodoModalProps) {
     const { open, onClose, todoInfo } = props;
+    const { setAlertMessage } = useAlertMessage();
 
     const {
         register,
@@ -45,7 +49,10 @@ export default function UpdateTodoModal(props: UpdateTodoModalProps) {
         };
 
         updateTodoMutation(apiData, {
-            onSuccess: () => onClose(),
+            onSuccess: () => {
+                setAlertMessage(UPDATE_TO_DO_SUCCESS);
+                onClose();
+            },
         });
     };
 
@@ -55,31 +62,57 @@ export default function UpdateTodoModal(props: UpdateTodoModalProps) {
                 <Typography variant="h6">
                     수정할 정보를 입력해주세요.
                 </Typography>
-                <form onSubmit={handleSubmit(handleUpdateTodo)}>
-                    <TextField
-                        required
-                        label="title"
-                        defaultValue={todoInfo.title}
-                        error={!(errors?.title?.message == null)}
-                        helperText={errors?.title?.message}
-                        {...register('title', { required: 'required' })}
-                    />
-                    <TextField
-                        required
-                        label="content"
-                        defaultValue={todoInfo.content}
-                        error={!(errors?.content?.message == null)}
-                        helperText={errors?.content?.message}
-                        {...register('content', { required: 'required' })}
-                    />
-                    <Button variant="contained" type="submit">
-                        수정
-                    </Button>
-                    <Button variant="contained" color="error" onClick={onClose}>
-                        취소
-                    </Button>
-                </form>
+                <StyledFormWrap onSubmit={handleSubmit(handleUpdateTodo)}>
+                    <StyledTextFieldsWrap>
+                        <TextField
+                            required
+                            label="title"
+                            defaultValue={todoInfo.title}
+                            error={!(errors?.title?.message == null)}
+                            helperText={errors?.title?.message}
+                            {...register('title', { required: 'required' })}
+                        />
+                        <TextField
+                            required
+                            label="content"
+                            defaultValue={todoInfo.content}
+                            error={!(errors?.content?.message == null)}
+                            helperText={errors?.content?.message}
+                            {...register('content', { required: 'required' })}
+                        />
+                    </StyledTextFieldsWrap>
+                    <StyledButtonsWrap>
+                        <Button variant="contained" type="submit">
+                            수정
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={onClose}
+                        >
+                            취소
+                        </Button>
+                    </StyledButtonsWrap>
+                </StyledFormWrap>
             </Box>
         </Modal>
     );
 }
+
+const StyledFormWrap = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0 0;
+`;
+
+const StyledTextFieldsWrap = styled.div`
+    display: flex;
+    gap: 5px;
+`;
+
+const StyledButtonsWrap = styled.div`
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+`;
