@@ -1,13 +1,9 @@
 import styled from '@emotion/styled';
-import BuildTwoToneIcon from '@mui/icons-material/BuildTwoTone';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {
     Button,
-    Divider,
-    IconButton,
-    List,
-    ListItem,
-    ListItemText,
+    Card,
+    CardActions,
+    CardContent,
     Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
@@ -55,95 +51,97 @@ export default function Todo() {
 
     return (
         <StyledTodoWrap>
-            <div>
+            <header>
                 <Typography variant="h5">TODO</Typography>
-                <Button variant="contained" onClick={handleOpenAddModal}>
-                    추가
+                <Button
+                    color="success"
+                    variant="outlined"
+                    onClick={handleOpenAddModal}
+                >
+                    + 추가
                 </Button>
+            </header>
+            <div>
+                {todoList?.data?.map((todo: ITodo) => (
+                    <StyledCard sx={{ minWidth: 200 }} key={todo.id}>
+                        <StyledCardContent>
+                            <Typography component="div" variant="h5">
+                                {todo.title}
+                            </Typography>
+                            <Typography
+                                variant="subtitle1"
+                                color="text.secondary"
+                                component="div"
+                            >
+                                {todo.content}
+                            </Typography>
+                        </StyledCardContent>
+                        <StyledCardActions>
+                            <Button
+                                color="secondary"
+                                variant="outlined"
+                                onClick={() => handleOpenUpdateModal(todo)}
+                            >
+                                수정
+                            </Button>
+                            <Button
+                                color="error"
+                                variant="outlined"
+                                onClick={() => handleDeleteTodo(todo.id)}
+                            >
+                                삭제
+                            </Button>
+                        </StyledCardActions>
+                    </StyledCard>
+                ))}
             </div>
-            <Divider />
-            <StyledTodoListWrap>
-                <List>
-                    {todoList?.data?.map((todo: ITodo) => (
-                        <StyledListItemWrap
-                            key={todo.id}
-                            secondaryAction={
-                                <StyledListActionButtons>
-                                    <IconButton
-                                        edge="end"
-                                        aria-label="modify"
-                                        onClick={() =>
-                                            handleOpenUpdateModal(todo)
-                                        }
-                                    >
-                                        <BuildTwoToneIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        edge="end"
-                                        aria-label="delete"
-                                        onClick={() =>
-                                            handleDeleteTodo(todo.id)
-                                        }
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </StyledListActionButtons>
-                            }
-                        >
-                            <ListItemText
-                                primary={todo.title}
-                                secondary={
-                                    <StyledListContent>
-                                        {todo.content}
-                                    </StyledListContent>
-                                }
-                            />
-                        </StyledListItemWrap>
-                    ))}
-                </List>
-                {isOpenAddTodoModal && (
-                    <AddTodoModal
-                        open={isOpenAddTodoModal}
-                        onClose={handleCloseAddModal}
-                    />
-                )}
-                {isOpenUpdateTodoModal && clickedTodoInfo != null && (
-                    <UpdateTodoModal
-                        open={isOpenUpdateTodoModal}
-                        onClose={handleCloseUpdateModal}
-                        todoInfo={clickedTodoInfo}
-                    />
-                )}
-            </StyledTodoListWrap>
+            {isOpenAddTodoModal && (
+                <AddTodoModal
+                    open={isOpenAddTodoModal}
+                    onClose={handleCloseAddModal}
+                />
+            )}
+            {isOpenUpdateTodoModal && clickedTodoInfo != null && (
+                <UpdateTodoModal
+                    open={isOpenUpdateTodoModal}
+                    onClose={handleCloseUpdateModal}
+                    todoInfo={clickedTodoInfo}
+                />
+            )}
         </StyledTodoWrap>
     );
 }
 
 const StyledTodoWrap = styled.div`
+    margin: 0 auto;
+    padding: 20px;
     width: 500px;
-    padding: 10px;
 
-    > div:first-of-type {
+    > header {
+        background-color: lavender;
         display: flex;
         justify-content: space-between;
-        padding: 5px;
+        padding: 20px 20px 20px 10px;
+        margin: 0 0 20px;
+        border-radius: 5px;
+    }
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 `;
 
-const StyledTodoListWrap = styled.div`
-    padding: 10px 0 0;
+const StyledCard = styled(Card)`
+    margin: 10px;
 `;
 
-const StyledListItemWrap = styled(ListItem)`
-    padding: 0 0 10px;
-`;
-
-const StyledListContent = styled.p`
+const StyledCardContent = styled(CardContent)`
     white-space: pre-wrap;
 `;
 
-const StyledListActionButtons = styled.div`
+const StyledCardActions = styled(CardActions)`
     display: flex;
-    gap: 5px;
-    padding: 0 20px 0;
+    justify-content: flex-end;
 `;

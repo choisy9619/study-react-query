@@ -79,7 +79,7 @@ export default function AddTodoModal(props: AddTodoModalProps) {
                     />
                     <span>{errors?.content?.message}</span>
                     <Button type="submit" variant="contained">
-                        ADD
+                        추가
                     </Button>
                 </StyledTextFieldsWrap>
             </Box>
@@ -92,10 +92,6 @@ const StyledTextFieldsWrap = styled.form`
     gap: 10px;
     flex-direction: column;
     padding: 5px 0 20px;
-
-    > button {
-        height: 56px;
-    }
 `;
 
 const StyledTextarea = styled(TextareaAutosize)`
