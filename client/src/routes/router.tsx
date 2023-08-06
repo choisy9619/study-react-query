@@ -2,14 +2,9 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import Home from '../pages/Home';
+import PrivateRoute from '../utils/PrivateRoute';
 
-import {
-    LOGIN_URL,
-    LOGOUT_URL,
-    MAIN_URL,
-    SIGN_UP_URL,
-    TODO_URL,
-} from '@/constants';
+import { LOGIN_URL, MAIN_URL, SIGN_UP_URL, TODO_URL } from '@/constants';
 import { Login, SignUp, Root, Error, Todo } from '@/pages';
 
 const router = createBrowserRouter([
@@ -31,11 +26,12 @@ const router = createBrowserRouter([
                 element: <Login />,
             },
             {
-                path: LOGOUT_URL,
-            },
-            {
                 path: TODO_URL,
-                element: <Todo />,
+                element: (
+                    <PrivateRoute>
+                        <Todo />
+                    </PrivateRoute>
+                ),
             },
         ],
     },
