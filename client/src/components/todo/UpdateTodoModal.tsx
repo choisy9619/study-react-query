@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -59,27 +60,25 @@ export default function UpdateTodoModal(props: UpdateTodoModalProps) {
     return (
         <Modal open={open} onClose={onClose}>
             <Box sx={style}>
-                <Typography variant="h6">
-                    수정할 정보를 입력해주세요.
-                </Typography>
+                <Typography variant="h6">수정할 정보를 입력해주세요</Typography>
                 <StyledFormWrap onSubmit={handleSubmit(handleUpdateTodo)}>
                     <StyledTextFieldsWrap>
                         <TextField
                             required
                             label="title"
                             defaultValue={todoInfo.title}
-                            error={!(errors?.title?.message == null)}
                             helperText={errors?.title?.message}
+                            error={!(errors?.title?.message == null)}
                             {...register('title', { required: 'required' })}
                         />
-                        <TextField
+                        <StyledTextarea
                             required
-                            label="content"
+                            minRows={5}
+                            id="content"
                             defaultValue={todoInfo.content}
-                            error={!(errors?.content?.message == null)}
-                            helperText={errors?.content?.message}
                             {...register('content', { required: 'required' })}
                         />
+                        <span>{errors?.content?.message}</span>
                     </StyledTextFieldsWrap>
                     <StyledButtonsWrap>
                         <Button variant="contained" type="submit">
@@ -109,10 +108,41 @@ const StyledFormWrap = styled.form`
 const StyledTextFieldsWrap = styled.div`
     display: flex;
     gap: 5px;
+    flex-direction: column;
+    padding: 5px 0 0;
+
+    > button {
+        height: 56px;
+    }
 `;
 
 const StyledButtonsWrap = styled.div`
     display: flex;
     gap: 5px;
     justify-content: flex-end;
+`;
+
+const StyledTextarea = styled(TextareaAutosize)`
+    font-family: IBM Plex Sans, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 12px;
+    border-radius: 5px;
+    color: gray;
+    background: white;
+    border: 1px solid gray;
+
+    &:hover {
+        border-color: black;
+    }
+
+    &:focus {
+        border-color: blue;
+    }
+
+    // firefox
+    &:focus-visible {
+        outline: 0;
+    }
 `;
