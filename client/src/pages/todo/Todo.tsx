@@ -10,7 +10,6 @@ import {
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Loading from '../../components/common/Loading';
 import AddTodoModal from '../../components/todo/AddTodoModal';
 import TodoNothing from '../../components/todo/TodoNothing';
 import UpdateTodoModal from '../../components/todo/UpdateTodoModal';
@@ -44,7 +43,7 @@ export default function Todo() {
     const [clickedTodoInfo, setClickedTodoInfo] = useState<ITodo>();
 
     const { mutate: deleteTodoMutation } = useDeleteTodo();
-    const { todoList, isGetTodoListLoading } = useGetTodoList();
+    const { todoList } = useGetTodoList();
 
     const handleOpenAddModal = () => setIsOpenAddModal(true);
     const handleCloseAddModal = () => setIsOpenAddModal(false);
@@ -70,9 +69,6 @@ export default function Todo() {
         }
     };
 
-    if (isGetTodoListLoading) return <Loading />;
-    if (todoList?.data?.length === 0) return <TodoNothing />;
-
     return (
         <>
             <Fab
@@ -95,38 +91,46 @@ export default function Todo() {
                     </Button>
                 </header>
                 <div>
-                    {todoList?.data?.map((todo: ITodo) => (
-                        <StyledCard sx={{ minWidth: 200 }} key={todo.id}>
-                            <StyledCardContent>
-                                <Typography component="div" variant="h5">
-                                    {todo.title}
-                                </Typography>
-                                <Typography
-                                    variant="subtitle1"
-                                    color="text.secondary"
-                                    component="div"
-                                >
-                                    {todo.content}
-                                </Typography>
-                            </StyledCardContent>
-                            <StyledCardActions>
-                                <Button
-                                    color="secondary"
-                                    variant="outlined"
-                                    onClick={() => handleOpenUpdateModal(todo)}
-                                >
-                                    수정
-                                </Button>
-                                <Button
-                                    color="error"
-                                    variant="outlined"
-                                    onClick={() => handleDeleteTodo(todo.id)}
-                                >
-                                    삭제
-                                </Button>
-                            </StyledCardActions>
-                        </StyledCard>
-                    ))}
+                    {todoList?.data?.length === 0 ? (
+                        <TodoNothing />
+                    ) : (
+                        todoList?.data?.map((todo: ITodo) => (
+                            <StyledCard sx={{ minWidth: 200 }} key={todo.id}>
+                                <StyledCardContent>
+                                    <Typography component="div" variant="h5">
+                                        {todo.title}
+                                    </Typography>
+                                    <Typography
+                                        variant="subtitle1"
+                                        color="text.secondary"
+                                        component="div"
+                                    >
+                                        {todo.content}
+                                    </Typography>
+                                </StyledCardContent>
+                                <StyledCardActions>
+                                    <Button
+                                        color="secondary"
+                                        variant="outlined"
+                                        onClick={() =>
+                                            handleOpenUpdateModal(todo)
+                                        }
+                                    >
+                                        수정
+                                    </Button>
+                                    <Button
+                                        color="error"
+                                        variant="outlined"
+                                        onClick={() =>
+                                            handleDeleteTodo(todo.id)
+                                        }
+                                    >
+                                        삭제
+                                    </Button>
+                                </StyledCardActions>
+                            </StyledCard>
+                        ))
+                    )}
                 </div>
                 {isOpenAddTodoModal && (
                     <AddTodoModal

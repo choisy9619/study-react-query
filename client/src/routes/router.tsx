@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
+import Loading from '../components/common/Loading';
 import Home from '../pages/Home';
 import PrivateRoute from '../utils/PrivateRoute';
 
@@ -28,9 +29,11 @@ const router = createBrowserRouter([
             {
                 path: TODO_URL,
                 element: (
-                    <PrivateRoute>
-                        <Todo />
-                    </PrivateRoute>
+                    <Suspense fallback={<Loading />}>
+                        <PrivateRoute>
+                            <Todo />
+                        </PrivateRoute>
+                    </Suspense>
                 ),
             },
         ],
