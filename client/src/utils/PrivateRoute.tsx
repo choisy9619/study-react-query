@@ -5,7 +5,11 @@ import { useAlertMessage } from '../stores/alert';
 
 import { LOGIN_URL, PLEASE_LOGIN, TOKEN } from '@/constants';
 
-export default function PrivateRoute({ children }: any) {
+interface IPrivateRoute {
+    children: JSX.Element;
+}
+
+export default function PrivateRoute({ children }: IPrivateRoute) {
     const { setAlertMessage } = useAlertMessage();
 
     if (!(localStorage.getItem(TOKEN) == null)) {
