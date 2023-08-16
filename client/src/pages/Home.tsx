@@ -3,13 +3,21 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { LOGIN_URL } from '@/constants';
+import { LOGIN_URL, TODO_URL, TOKEN } from '@/constants';
 
 export default function Home() {
     return (
         <StyledHomeWrap>
             <Typography variant="h5">Home</Typography>{' '}
-            <Link to={LOGIN_URL}>Please Login to start your Todo App.</Link>
+            <Link
+                to={
+                    !(localStorage.getItem(TOKEN) == null)
+                        ? TODO_URL
+                        : LOGIN_URL
+                }
+            >
+                Please Login to start your Todo App.
+            </Link>
         </StyledHomeWrap>
     );
 }
