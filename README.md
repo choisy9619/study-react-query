@@ -1,4 +1,4 @@
-# [ React Query ] Todo App Study 👩🏻‍💻
+# React Query - Todo App Study 👩🏻‍💻
 
 
 ## 일정
