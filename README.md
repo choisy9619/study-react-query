@@ -1,8 +1,7 @@
 # [ React Query ] Todo App Study 👩🏻‍💻
 
-------
-## Study Progress
 
+## 일정
 - [Assignment 1 - Login / Signup](https://github.com/choisy9619/study-react-query/pull/1)
   - [x] 로그인 / 회원가입 페이지 UI 개발 - React Hook Form
   - [x] React-query를 이용한 API 연동
@@ -19,8 +18,8 @@
   - [x] 로그아웃 기능 추가
 
 
-## Error Handling
-> 로그인에 성공한 후 → Todo 페이지로 이동 시켰을 때, 바로 rendering 되지 않고 Error 페이지로 이동하고, Refresh 후 정상동작
+## 에러 핸들링
+> 로그인에 성공 후, Todo 페이지가 바로 rendering 되지 않고 Error 페이지로 이동하고, Refresh 후 정상동작
 
 ### 에러 상세 내용
 비동기 처리 시(loading, 랜더링할 데이터가 도착하기 이전) 보여줄 UI가 없어서 ErrorElement 컴포넌트가 보이게 됨
@@ -48,7 +47,7 @@ To fix, updates that suspend should be wrapped with startTransition.
  },
 ```
 
-### startTransition
+### startTransition - 추가정보
 에러 상세 내용 - `To fix, updates that suspend should be wrapped with startTransition.`에서 startTransition에 대해 추가 정보
 - 비동기적인 작업을 수행하면서 UI 렌더링을 중단하지 않도록 해줌
 - 예시
