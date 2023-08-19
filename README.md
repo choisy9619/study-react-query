@@ -1,13 +1,106 @@
-### 설치
+# [ React Query ] Todo App Study 👩🏻‍💻
+
+------
+## Study Progress
+
+- [Assignment 1 - Login / Signup](https://github.com/choisy9619/study-react-query/pull/1)
+  - [x] 로그인 / 회원가입 페이지 UI 개발 - React Hook Form
+  - [x] React-query를 이용한 API 연동
+- [Assignment 2 - Todo List](https://github.com/choisy9619/study-react-query/pull/2)
+  - [x] Todo 페이지 UI 개발 - Mui, Modal
+  - [x] API 정리 - Axios Instance, React-query Hook(CRUD)
+- [Refactoring 1](https://github.com/choisy9619/study-react-query/pull/3)
+  - [x] 코드리뷰 반영 - React Hook Form, 로그인 후 액션
+  - [x] Global Alert Message - Zustand
+  - [x] Route - 메인 HomePage 구현
+- [Refactoring 2](https://github.com/choisy9619/study-react-query/pull/4)
+  - [x] Todo content - 줄바꿈 허용을 위한 TextArea(+ react hook form) 적용
+  - [x] PrivateRoute, Suspense를 통한 ErrorBoundary 설정
+  - [x] 로그아웃 기능 추가
+
+
+## Error Handling
+> 로그인에 성공한 후 → Todo 페이지로 이동 시켰을 때, 바로 rendering 되지 않고 Error 페이지로 이동하고, Refresh 후 정상동작
+
+### 에러 상세 내용
+비동기 처리 시(loading, 랜더링할 데이터가 도착하기 이전) 보여줄 UI가 없어서 ErrorElement 컴포넌트가 보이게 됨
+```
+React Router caught the following error during render Error: 
+A component suspended while responding to synchronous input. 
+This will cause the UI to be replaced with a loading indicator. 
+To fix, updates that suspend should be wrapped with startTransition.
+```
+
+### Suspense - 해결법
+- 비동기 상태 처리 관련 코드 - if (isGetTodoListLoading) return <Loading />; 제거
+- Todo 컴포넌트를 사용하는 APP 단에서 로딩 상태 처리
+- 언로드된 페이지에서 데이터를 처음 로드하는 경우
+```
+ {
+     path: TODO_URL,
+     element: (
+         <Suspense fallback={<Loading />}>
+             <PrivateRoute>
+                 <Todo />
+             </PrivateRoute>
+         </Suspense>
+     ),
+ },
+```
+
+### startTransition
+에러 상세 내용 - `To fix, updates that suspend should be wrapped with startTransition.`에서 startTransition에 대해 추가 정보
+- 비동기적인 작업을 수행하면서 UI 렌더링을 중단하지 않도록 해줌
+- 예시
+  - Fetch Data 라는 버튼을 눌러도 아래에 있는 기존 UI에 대한 반응성은 유지가 됨
+  - 이미 로드된 페이지에서 새 데이터를 로드하는 경우
+
+```
+import { startTransition, useState } from 'react';
+
+function App() {
+  const [data, setData] = useState(null);
+
+  const fetchData = async () => {
+    const response = await fetch('https://api.example.com/data');
+    const result = await response.json();
+    setData(result);
+  };
+
+  const handleButtonClick = () => {
+    startTransition(() => {
+      fetchData();
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleButtonClick}>Fetch Data</button>
+      <div>
+        {data ? (
+          <ul>
+            {data.map(item => (
+              <li key={item.id}>{item.name}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No data yet.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default App;
+ ```
+
+
+------
+### 프로젝트 설치/실행
 ```shell
 yarn install
-```
-
-### 프로젝트 시작
-```shell
 yarn start
 ```
-
 
 
 # 1-1) 사전과제 진행 가이드
